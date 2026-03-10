@@ -6,37 +6,46 @@
   <title>Paul Hayes - Technology, Operations & Transformation Executive</title>
   <link rel="icon" type="image/png" href="profile.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg: #ffffff;
       --bg-soft: #f8fafc;
+      --bg-alt: #f3f6f9;
       --text: #333333;
       --text-soft: #5b6673;
       --heading: #111827;
       --line: #e5e7eb;
       --dark: #111111;
       --dark-soft: #333333;
+      --accent: #2f4858;
       --card-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      --card-shadow-hover: 0 16px 34px rgba(0,0,0,0.08);
+      --radius: 18px;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+
+    html { scroll-behavior: auto; }
+
     body {
       font-family: 'Open Sans', sans-serif;
       margin: 0;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     header {
       position: sticky;
       top: 0;
       background: rgba(255,255,255,0.94);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--line);
       padding: 14px 40px;
-      z-index: 10;
+      z-index: 1000;
     }
 
     .header-inner {
@@ -48,11 +57,25 @@
       gap: 20px;
     }
 
+    .brand strong {
+      display: block;
+      color: var(--heading);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .brand span {
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
     nav a {
-      margin-left: 20px;
+      margin-left: 18px;
       text-decoration: none;
       color: #444;
       font-size: 14px;
+      transition: color .2s ease;
     }
 
     nav a:hover { color: #000; }
@@ -60,30 +83,37 @@
     .container {
       max-width: 1180px;
       margin: auto;
-      padding: 64px 30px;
+      padding: 72px 30px;
     }
 
-    h1, h2, h3 {
+    h1, h2, h3, h4 {
       font-family: 'Montserrat', sans-serif;
       color: var(--heading);
       margin-top: 0;
     }
 
     h1 {
-      font-size: 54px;
+      font-size: 56px;
       font-weight: 700;
-      line-height: 1.05;
-      margin-bottom: 12px;
+      line-height: 1.03;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
     }
 
     h2 {
       font-size: 34px;
       margin-bottom: 18px;
+      letter-spacing: -0.02em;
     }
 
     h3 {
-      font-size: 20px;
+      font-size: 21px;
       margin-bottom: 10px;
+    }
+
+    h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
     }
 
     p { margin: 0 0 14px; }
@@ -97,14 +127,20 @@
       margin-bottom: 10px;
     }
 
-    .hero { background: linear-gradient(180deg, #f8fafc, #ffffff); }
+    .hero {
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    .section-soft {
+      background: var(--bg-soft);
+    }
 
     .hero-flex {
       display: grid;
-      grid-template-columns: 1.4fr .9fr;
-      gap: 40px;
+      grid-template-columns: 1.45fr .95fr;
+      gap: 42px;
       align-items: center;
-      margin-top: 26px;
+      margin-top: 24px;
     }
 
     .hero-copy p {
@@ -118,64 +154,32 @@
       align-items: center;
       gap: 24px;
       flex-wrap: wrap;
+      justify-content: flex-start;
     }
 
     .profile-img {
-      width: 160px;
-      height: 160px;
+      width: 164px;
+      height: 164px;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid #eef2f7;
       box-shadow: var(--card-shadow);
+      flex-shrink: 0;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 20px;
-      margin-top: 42px;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 24px;
-      background: #fff;
-      transition: all .25s ease;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--card-shadow);
-    }
-
-    .card.soft { background: var(--bg-soft); }
-
-    .grid3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 24px;
-    }
-
-    ul {
+    .quote {
+      font-size: 18px;
+      color: var(--text-soft);
       padding-left: 18px;
-      margin: 0;
+      border-left: 3px solid #d8dee7;
+      max-width: 360px;
     }
-
-    li { margin-bottom: 8px; }
 
     .button-row {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .button {
@@ -187,12 +191,13 @@
       text-decoration: none;
       font-weight: 600;
       border: 1px solid var(--dark);
-      transition: .2s ease;
+      transition: .22s ease;
     }
 
     .button:hover {
       background: var(--dark-soft);
       border-color: var(--dark-soft);
+      transform: translateY(-1px);
     }
 
     .button.alt {
@@ -201,7 +206,35 @@
       border: 1px solid #cfd4dc;
     }
 
-    .button.alt:hover { background: #f7f7f7; }
+    .button.alt:hover {
+      background: #f7f7f7;
+      border-color: #bcc4cf;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 20px;
+      margin-top: 42px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      background: #fff;
+      transition: all .25s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .card.soft {
+      background: var(--bg-soft);
+    }
 
     .stat-value {
       font-family: 'Montserrat', sans-serif;
@@ -209,6 +242,19 @@
       font-weight: 700;
       color: var(--heading);
       line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
     }
 
     .timeline {
@@ -242,13 +288,6 @@
       color: var(--heading);
     }
 
-    .quote {
-      font-size: 18px;
-      color: var(--text-soft);
-      padding-left: 18px;
-      border-left: 3px solid #d8dee7;
-    }
-
     .summary-image {
       display: block;
       width: 100%;
@@ -256,6 +295,48 @@
       border-radius: 18px;
       border: 1px solid var(--line);
       box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .summary-image:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.10);
+    }
+
+    .case-meta {
+      display: grid;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .case-meta-block {
+      padding: 14px 16px;
+      background: var(--bg-alt);
+      border-radius: 12px;
+      border: 1px solid #e8edf2;
+    }
+
+    .case-meta-block strong {
+      display: block;
+      color: var(--heading);
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .playbook-note {
+      margin-top: 24px;
+      border-left: 4px solid #d8dee7;
+      padding: 18px 20px;
+      background: #fff;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
 
     .footer {
@@ -273,8 +354,21 @@
       color: var(--text-soft);
     }
 
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s ease, transform .8s ease;
+      will-change: opacity, transform;
+    }
+
+    .section-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     @media (max-width: 900px) {
       h1 { font-size: 42px; }
+      h2 { font-size: 30px; }
       .hero-flex { grid-template-columns: 1fr; }
       .hero-media { justify-content: flex-start; }
       header { padding: 14px 20px; }
@@ -284,11 +378,12 @@
   </style>
 </head>
 <body>
+
   <header>
     <div class="header-inner">
-      <div>
-        <strong>Paul Hayes</strong><br>
-        <span class="small">Technology, Operations & Transformation Executive</span>
+      <div class="brand">
+        <strong>Paul Hayes</strong>
+        <span>Technology, Operations & Transformation Executive</span>
       </div>
       <nav>
         <a href="#impact">Impact</a>
@@ -303,7 +398,7 @@
     </div>
   </header>
 
-  <section class="hero">
+  <section class="hero section-reveal">
     <div class="container">
       <div class="eyebrow">Operational Transformation - Enterprise Platforms - Acquisition Integration - Automation & AI</div>
       <div class="hero-flex">
@@ -317,22 +412,34 @@
         </div>
         <div class="hero-media">
           <img src="profile.jpg" alt="Paul Hayes" class="profile-img">
-          <div style="max-width:360px;">
-            <p class="quote">Clarity before complexity. Technology should reduce drag, improve visibility and give good people the structure to perform.</p>
+          <div class="quote">
+            Clarity before complexity. Technology should reduce drag, improve visibility and give good people the structure to perform.
           </div>
         </div>
       </div>
 
       <div class="stats">
-        <div class="card"><div class="stat-value">£6m → £170m</div><p>Apogee growth supported</p></div>
-        <div class="card"><div class="stat-value">14</div><p>Acquisitions integrated</p></div>
-        <div class="card"><div class="stat-value">$500m</div><p>HP acquisition value</p></div>
-        <div class="card"><div class="stat-value">45</div><p>Tinder workforce</p></div>
+        <div class="card">
+          <div class="stat-value">£6m → £170m</div>
+          <p>Apogee growth supported</p>
+        </div>
+        <div class="card">
+          <div class="stat-value">14</div>
+          <p>Acquisitions integrated</p>
+        </div>
+        <div class="card">
+          <div class="stat-value">$500m</div>
+          <p>HP acquisition value</p>
+        </div>
+        <div class="card">
+          <div class="stat-value">45</div>
+          <p>Tinder workforce</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="impact">
+  <section id="impact" class="section-reveal">
     <div class="container">
       <div class="eyebrow">Operating Executive Profile</div>
       <h2>Technology, operations and commercial alignment at scale</h2>
@@ -341,21 +448,21 @@
       <div class="grid3" style="margin-top:28px;">
         <div class="card">
           <h3>Enterprise Platforms</h3>
-          <p>Designed ERP, CRM and service platforms enabling complex service delivery organisations to scale.</p>
+          <p>Designed ERP, CRM and service platforms that created operational visibility, reduced manual friction and supported complex service delivery organisations as they scaled.</p>
         </div>
         <div class="card">
           <h3>Acquisition Integration</h3>
-          <p>Integrated 14 acquired businesses into unified operational systems and operating models.</p>
+          <p>Integrated 14 acquired businesses into unified operational systems and operating models, combining technology alignment with hands-on stabilisation and culture support.</p>
         </div>
         <div class="card">
           <h3>Automation & AI</h3>
-          <p>Embedded LLM workflows, document automation and operational data processing to reduce manual work and improve control.</p>
+          <p>Embedded LLM workflows, document automation and operational data processing into live environments to improve control, knowledge access and delivery efficiency.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="visual-summary" class="hero">
+  <section id="visual-summary" class="hero section-reveal">
     <div class="container">
       <div class="eyebrow">Executive Overview</div>
       <h2>The Architecture of Scale</h2>
@@ -368,7 +475,7 @@
     </div>
   </section>
 
-  <section id="timeline">
+  <section id="timeline" class="section-reveal">
     <div class="container">
       <div class="eyebrow">Career Impact Timeline</div>
       <h2>Progression from scale-up operator to founder-led transformation</h2>
@@ -379,96 +486,138 @@
         </div>
         <div class="timeline-item">
           <strong>Enterprise Platform Development</strong>
-          Built Silo ERP, evolved CBS service platform and integrated Radius CRM.
+          Built Silo ERP, evolved CBS service platform and integrated Radius CRM to create the backbone for sales, service and reporting.
         </div>
         <div class="timeline-item">
           <strong>National Scale</strong>
-          600+ staff across 14 offices with 14 acquisitions integrated.
+          Supported growth to 600+ staff across 14 offices, with 14 acquisitions integrated into a unified operating model.
         </div>
         <div class="timeline-item">
           <strong>HP Acquisition</strong>
-          Apogee acquired by Hewlett-Packard for approximately $500m.
+          Apogee acquired by Hewlett-Packard for approximately $500m, with core systems still central to the business today.
         </div>
         <div class="timeline-item">
           <strong>2013 - Founded Tinder Corporation</strong>
-          Built Centric ERP and full operating model prior to launch.
+          Built Centric ERP and the full operating model before launch, creating a platform-led business from day one.
         </div>
         <div class="timeline-item">
           <strong>Telecom Infrastructure Expansion</strong>
-          Delivered projects for Hyperoptic, Virgin Media and BT OpenReach via Morrison Utilities.
+          Delivered projects for Hyperoptic, Virgin Media and BT OpenReach via Morrison Utilities, adding PMO, compliance and field operations capability.
         </div>
         <div class="timeline-item">
           <strong>Automation & AI</strong>
-          Introduced LLM-driven workflows and operational automation.
+          Introduced LLM-driven workflows, document automation and operational processing pipelines to improve efficiency and control.
         </div>
       </div>
     </div>
   </section>
 
-  <section id="apogee" class="hero">
+  <section id="apogee" class="hero section-reveal">
     <div class="container">
       <div class="eyebrow">Case Study</div>
       <h2>Scaling Apogee to a $500m Exit</h2>
+
       <div class="grid3">
         <div class="card">
           <h3>Context</h3>
-          <p>Joined when the business relied on manual workflows and fragmented systems but had ambitions for national growth and acquisition.</p>
+          <p>Paul joined Apogee when the business still relied heavily on manual workflows, spreadsheet-driven processes and basic legacy service tooling, but had strong ambition for national expansion and acquisition-led growth.</p>
+          <p>The challenge was not simply to improve IT, but to build the operational structure, controls and platforms that would allow the organisation to scale without losing visibility, pace or discipline.</p>
+
+          <div class="case-meta">
+            <div class="case-meta-block">
+              <strong>Starting point</strong>
+              ~20 staff | ~£5-6m revenue | one Croydon office
+            </div>
+            <div class="case-meta-block">
+              <strong>Strategic challenge</strong>
+              Build scalable platforms and operating discipline for national growth
+            </div>
+          </div>
         </div>
+
         <div class="card">
           <h3>Action</h3>
           <ul>
-            <li>Built Silo ERP managing the sales to delivery lifecycle</li>
-            <li>Integrated CBS service platform and Radius CRM</li>
-            <li>Designed operating model with CEO and SLT</li>
-            <li>Led acquisition technology due diligence</li>
-            <li>Integrated newly acquired businesses and supported culture alignment</li>
+            <li>Built Silo ERP to manage the full sales-to-delivery lifecycle including quoting, solution progression, provisioning and billing readiness</li>
+            <li>Evolved CBS service management workflows, reporting and controls to strengthen governance and operational insight</li>
+            <li>Integrated Radius CRM with core operational platforms to reduce duplication and improve visibility across pipeline, delivery and service</li>
+            <li>Introduced reconciliation, purchasing control, lease document and EDI capabilities to improve financial discipline and operational consistency</li>
+            <li>Worked alongside the CEO and SLT to shape the operating model supporting national scale and acquisition integration</li>
+            <li>Led technology due diligence, post-acquisition integration and hands-on stabilisation of acquired businesses</li>
+            <li>Supported culture alignment and transition within newly acquired firms, often in an embedded leadership capacity</li>
+            <li>Helped drive the transition from analogue document solutions towards digital software-led services</li>
           </ul>
         </div>
+
         <div class="card soft">
           <h3>Impact</h3>
+          <p>The result was an integrated operating environment that gave the business stronger control, cleaner data, better reporting and the ability to scale nationally with confidence.</p>
           <ul>
             <li>Revenue growth from £6m to approximately £170m</li>
-            <li>600+ staff across national offices</li>
-            <li>14 acquisitions integrated</li>
-            <li>$500m acquisition by Hewlett-Packard</li>
+            <li>600+ staff across 14 UK offices plus European locations</li>
+            <li>14 acquisitions integrated into a unified operational platform and operating model</li>
+            <li>Improved visibility across sales, delivery, service and field engineering activity</li>
+            <li>Apogee acquired by Hewlett-Packard for approximately $500m</li>
+            <li>Core systems developed in this period remain central to the business today</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="tinder">
+  <section id="tinder" class="section-reveal">
     <div class="container">
       <div class="eyebrow">Case Study</div>
       <h2>Building Tinder Corporation</h2>
+
       <div class="grid3">
         <div class="card">
           <h3>Context</h3>
-          <p>Founded to bring enterprise-grade IT strategy and operational capability to the SME market.</p>
+          <p>Tinder Corporation was founded to bring enterprise-grade IT strategy, technology capability and operating model discipline to the SME market. From day one, the aim was to create a business with stronger structure, better systems and clearer governance than most businesses of its size.</p>
+          <p>As the company evolved, it expanded beyond managed IT and telecoms into higher-stakes telecom infrastructure delivery, requiring a significant step-up in project control, compliance and reporting maturity.</p>
+
+          <div class="case-meta">
+            <div class="case-meta-block">
+              <strong>Founder phase</strong>
+              Built from zero with ERP, SOPs, contracts and operating model in place
+            </div>
+            <div class="case-meta-block">
+              <strong>Growth phase</strong>
+              Expanded into telecom infrastructure and complex client delivery environments
+            </div>
+          </div>
         </div>
+
         <div class="card">
           <h3>Action</h3>
           <ul>
-            <li>Built Centric ERP and the full operating model</li>
-            <li>Expanded into telecom infrastructure delivery</li>
-            <li>Implemented PMO and compliance frameworks</li>
-            <li>Integrated client platforms including Salesforce</li>
-            <li>Embedded automation and LLM workflows</li>
+            <li>Built Centric ERP before launch to manage operations from the outset rather than bolting systems on later</li>
+            <li>Designed the full operating model including workflows, service governance, legal/commercial structure and reporting controls</li>
+            <li>Expanded into telecom infrastructure delivery for Hyperoptic, Virgin Media and BT OpenReach via Morrison Utilities</li>
+            <li>Implemented PMO capability, contractor controls, SHEQ/compliance frameworks and client-platform workflows including Salesforce and iAuditor</li>
+            <li>Led development of the Quality Management System and achieved ISO 9001 with a genuinely embedded governance approach</li>
+            <li>Introduced automation and LLM-driven workflows directly into Centric for document generation, knowledge access and process acceleration</li>
+            <li>Built data-processing pipelines to bridge gaps where client systems had no usable API access</li>
+            <li>Delivered SLT skills development to improve leadership maturity and organisational capability</li>
           </ul>
         </div>
+
         <div class="card soft">
           <h3>Impact</h3>
+          <p>The business developed into a structured, platform-led operation capable of delivering within demanding infrastructure environments while maintaining governance and operational control.</p>
           <ul>
-            <li>45-person workforce</li>
-            <li>Delivery for Hyperoptic, Virgin Media, Morrison Utilities and OpenReach</li>
-            <li>Operational maturity with automation and ERP control</li>
+            <li>Scaled to a 45-person workforce across office, field and contractor capability</li>
+            <li>Delivered for Hyperoptic, Virgin Media, Morrison Utilities and BT OpenReach environments</li>
+            <li>Built stronger PMO, compliance and evidence-based operational discipline</li>
+            <li>Created automation and AI-enabled workflows that reduced manual effort and improved consistency</li>
+            <li>Established a more mature operating environment than is typical for a business of that size</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="philosophy" class="hero">
+  <section id="philosophy" class="hero section-reveal">
     <div class="container">
       <div class="eyebrow">Operating Philosophy</div>
       <h2>How transformation is approached</h2>
@@ -501,10 +650,11 @@
     </div>
   </section>
 
-  <section id="playbook">
+  <section id="playbook" class="section-reveal">
     <div class="container">
       <div class="eyebrow">Transformation Playbook</div>
       <h2>How I approach the first 90 days</h2>
+
       <div class="grid3">
         <div class="card">
           <h3>Days 1-30</h3>
@@ -517,6 +667,7 @@
             <li>Clarify strategic priorities with CEO and board</li>
           </ul>
         </div>
+
         <div class="card">
           <h3>Days 30-60</h3>
           <p><strong>Create clarity and alignment</strong></p>
@@ -528,6 +679,7 @@
             <li>Stabilise high-risk delivery areas</li>
           </ul>
         </div>
+
         <div class="card">
           <h3>Days 60-90</h3>
           <p><strong>Drive early momentum</strong></p>
@@ -540,13 +692,14 @@
           </ul>
         </div>
       </div>
-      <div class="card" style="margin-top:24px;">
-        <p><strong>My focus in transformation environments is simple:</strong> create clarity, remove operational friction, and build systems that allow strong teams to scale.</p>
+
+      <div class="playbook-note">
+        <strong>My focus in transformation environments is simple:</strong> create clarity, remove operational friction, and build systems that allow strong teams to scale.
       </div>
     </div>
   </section>
 
-  <section id="leadership" class="hero">
+  <section id="leadership" class="hero section-reveal">
     <div class="container">
       <div class="eyebrow">Leadership Themes</div>
       <h2>Consistent themes across both corporate and founder-led environments</h2>
@@ -568,49 +721,62 @@
       <a class="button alt" href="Paul-Hayes-Technology-Transformation-Executive.pdf" target="_blank" rel="noopener" style="background:transparent; color:#fff; border-color:#666;">Download CV</a>
     </div>
   </footer>
-<script>
-// Smooth scroll with easing
-function easeInOutCubic(t){
-  return t < 0.5
-    ? 4 * t * t * t
-    : 1 - Math.pow(-2 * t + 2, 3) / 2;
-}
 
-function smoothScrollTo(targetY, duration){
-  const startY = window.scrollY;
-  const diff = targetY - startY;
-  let start;
-
-  function step(timestamp){
-    if(!start) start = timestamp;
-    const time = timestamp - start;
-    const progress = Math.min(time / duration, 1);
-    const eased = easeInOutCubic(progress);
-
-    window.scrollTo(0, startY + diff * eased);
-
-    if(time < duration) requestAnimationFrame(step);
-  }
-
-  requestAnimationFrame(step);
-}
-
-// Attach to all internal links
-const links = document.querySelectorAll('a[href^="#"]');
-
-links.forEach(link => {
-  link.addEventListener('click', function(e){
-    const id = this.getAttribute('href');
-    const target = document.querySelector(id);
-
-    if(target){
-      e.preventDefault();
-      const y = target.getBoundingClientRect().top + window.pageYOffset - 70;
-      smoothScrollTo(y, 600);
+  <script>
+    function easeInOutCubic(t) {
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
-  });
-});
-</script>
 
+    function smoothScrollTo(targetY, duration) {
+      const startY = window.scrollY;
+      const diff = targetY - startY;
+      let start;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        const time = timestamp - start;
+        const progress = Math.min(time / duration, 1);
+        const eased = easeInOutCubic(progress);
+
+        window.scrollTo(0, startY + diff * eased);
+
+        if (time < duration) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    const internalLinks = document.querySelectorAll('a[href^="#"]');
+
+    internalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        const id = this.getAttribute('href');
+        const target = document.querySelector(id);
+
+        if (target) {
+          e.preventDefault();
+          const y = target.getBoundingClientRect().top + window.pageYOffset - 78;
+          smoothScrollTo(y, 650);
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12
+    });
+
+    document.querySelectorAll('.section-reveal').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
 </body>
 </html>
