@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paul Hayes - Deep Dive Experience</title>
+  <link rel="icon" type="image/png" href="profile.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f8fafc;
+      --bg-alt: #f3f6f9;
+      --text: #333333;
+      --text-soft: #5b6673;
+      --heading: #111827;
+      --line: #d1d5db;
+      --dark: #111111;
+      --dark-soft: #333333;
+      --accent: #2f4858;
+      --card-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      --card-shadow-hover: 0 16px 34px rgba(0,0,0,0.08);
+      --radius: 18px;
+      --header-bg: rgba(255,255,255,0.94);
+      --hero-bg: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      --quote-line: #d8dee7;
+      --button-alt-bg: #ffffff;
+      --button-alt-text: #222222;
+      --button-alt-border: #bfc7d1;
+      --case-meta-border: #d6dde6;
+      --playbook-line: #d8dee7;
+      --chip-bg: #eef3f7;
+      --chip-text: #324554;
+      --panel-shadow: 0 8px 22px rgba(0,0,0,0.05);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0f14;
+      --bg-soft: #111820;
+      --bg-alt: #18212c;
+      --text: #d9e2ec;
+      --text-soft: #9fb0c0;
+      --heading: #f3f6fb;
+      --line: #283241;
+      --dark: #f3f6fb;
+      --dark-soft: #d9e2ec;
+      --accent: #9cc7ff;
+      --card-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      --card-shadow-hover: 0 16px 34px rgba(0,0,0,0.34);
+      --header-bg: rgba(11,15,20,0.92);
+      --hero-bg: linear-gradient(180deg, #10161d 0%, #0b0f14 100%);
+      --quote-line: #324052;
+      --button-alt-bg: transparent;
+      --button-alt-text: #f3f6fb;
+      --button-alt-border: #445164;
+      --case-meta-border: #324052;
+      --playbook-line: #324052;
+      --chip-bg: #1a2531;
+      --chip-text: #cfe2f6;
+      --panel-shadow: 0 8px 22px rgba(0,0,0,0.22);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 40px;
+      z-index: 1000;
+      transition: background .25s ease, border-color .25s ease;
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand strong {
+      display: block;
+      color: var(--heading);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .brand span {
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    nav a {
+      margin-left: 18px;
+      text-decoration: none;
+      color: var(--text-soft);
+      font-size: 14px;
+      transition: color .2s ease;
+      white-space: nowrap;
+    }
+
+    nav a:hover,
+    nav a.active { color: var(--heading); }
+
+    nav a.nav-cta {
+      margin-left: 0;
+      margin-right: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--heading);
+      color: var(--heading);
+      font-weight: 700;
+      background: transparent;
+      transition: .22s ease;
+    }
+
+    nav a.nav-cta:hover {
+      background: var(--heading);
+      color: var(--bg);
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle {
+      display: inline-block;
+      padding: 10px 14px;
+      background: transparent;
+      color: var(--heading);
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: .22s ease;
+      white-space: nowrap;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      border-color: var(--text-soft);
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: auto;
+      padding: 72px 30px;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--heading);
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 54px;
+      font-weight: 700;
+      line-height: 1.03;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 34px;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    p { margin: 0 0 14px; }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #667085;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    [data-theme="dark"] .eyebrow { color: var(--text-soft); }
+
+    .hero {
+      background: var(--hero-bg);
+      transition: background .25s ease;
+    }
+
+    #deep-dive .container {
+      padding-top: 40px;
+    }
+
+    .section-soft {
+      background: var(--bg-soft);
+      transition: background .25s ease;
+    }
+
+    .hero-flex {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 42px;
+      align-items: start;
+      margin-top: 24px;
+    }
+
+    .hero-copy p {
+      font-size: 18px;
+      color: var(--text-soft);
+      max-width: 760px;
+    }
+
+    .hero-aside {
+      display: grid;
+      gap: 16px;
+    }
+
+    .quote {
+      font-size: 18px;
+      color: var(--text-soft);
+      padding-left: 18px;
+      border-left: 3px solid var(--quote-line);
+      transition: border-color .25s ease;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 11px 18px;
+      background: var(--dark);
+      color: var(--bg);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--dark);
+      transition: .22s ease;
+    }
+
+    .button:hover {
+      background: var(--dark-soft);
+      border-color: var(--dark-soft);
+      transform: translateY(-1px);
+    }
+
+    .button.alt {
+      background: var(--button-alt-bg);
+      color: var(--button-alt-text);
+      border: 1px solid var(--button-alt-border);
+    }
+
+    .button.alt:hover {
+      background: var(--bg-soft);
+      border-color: var(--text-soft);
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s ease, transform .8s ease;
+      will-change: opacity, transform;
+    }
+
+    .section-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .accordion {
+      display: grid;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--bg);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      overflow: hidden;
+      transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+    }
+
+    .accordion-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow);
+    }
+
+    .accordion-toggle {
+      width: 100%;
+      background: transparent;
+      color: inherit;
+      border: 0;
+      text-align: left;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 20px;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .accordion-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .accordion-title {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--heading);
+      font-size: 28px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .accordion-summary {
+      color: var(--text-soft);
+      max-width: 760px;
+      margin: 0;
+    }
+
+    .accordion-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .toggle-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--heading);
+      font-size: 22px;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: transform .25s ease, background .25s ease, border-color .25s ease;
+    }
+
+    .accordion-item.open .toggle-icon {
+      transform: rotate(45deg);
+      background: var(--bg-soft);
+    }
+
+    .accordion-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .35s ease;
+    }
+
+    .accordion-item.open .accordion-panel {
+      grid-template-rows: 1fr;
+    }
+
+    .accordion-panel-inner {
+      overflow: hidden;
+    }
+
+    .accordion-content {
+      padding: 0 28px 28px 28px;
+      border-top: 1px solid var(--line);
+      margin: 0;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 24px;
+      margin-top: 24px;
+      align-items: start;
+    }
+
+    .panel-section {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      background: var(--bg-soft);
+      box-shadow: var(--panel-shadow);
+    }
+
+    .panel-section h4 {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+    }
+
+    .panel-section p:last-child,
+    .panel-section ul:last-child { margin-bottom: 0; }
+
+    ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .highlight-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .highlight {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--bg);
+      border: 1px solid var(--case-meta-border);
+    }
+
+    .highlight strong {
+      display: block;
+      color: var(--heading);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .filter-row.sticky {
+      position: sticky;
+      top: 76px;
+      z-index: 950;
+      padding: 12px 0;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    [data-theme="dark"] .filter-row.sticky {
+      background: rgba(11,15,20,0.88);
+    }
+
+    .filter-btn {
+      border: 1px solid var(--button-alt-border);
+      background: var(--button-alt-bg);
+      color: var(--button-alt-text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .22s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--dark);
+      color: var(--bg);
+      border-color: var(--dark);
+    }
+
+    .challenge-cta {
+      background: var(--bg-soft);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      transition: background .25s ease, border-color .25s ease;
+    }
+
+    .challenge-cta .container {
+      padding-top: 56px;
+      padding-bottom: 56px;
+    }
+
+    .challenge-cta p {
+      max-width: 760px;
+      color: var(--text-soft);
+      font-size: 18px;
+    }
+
+    .footer {
+      background: #111111;
+      color: #ffffff;
+      padding: 54px 30px;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .footer a { color: #ffffff; }
+
+    .footer .button {
+      background: #ffffff;
+      color: #111111;
+      border-color: #ffffff;
+    }
+
+    .footer .button:hover {
+      background: #f2f2f2;
+      border-color: #f2f2f2;
+    }
+
+    .footer .button.alt {
+      background: transparent;
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .footer .button.alt:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.55);
+    }
+
+    .small {
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .hidden-by-filter {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .filter-row.sticky {
+        top: 68px;
+        padding: 10px 0;
+      }
+
+      h1 { font-size: 42px; }
+      h2 { font-size: 30px; }
+      .hero-flex,
+      .panel-grid { grid-template-columns: 1fr; }
+      header { padding: 14px 20px; }
+      .container { padding: 54px 20px; }
+      nav { display: none; }
+      .accordion-toggle {
+        grid-template-columns: 1fr;
+      }
+      .accordion-meta {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <strong>Paul Hayes</strong>
+        <span>Operational Leadership Experience & Impact</span>
+      </div>
+
+      <div class="header-right">
+        <nav>
+          <a href="index.html" class="nav-cta">Main Page</a>
+          <a href="#overview">Overview</a>
+          <a href="#deep-dive">Deep dive</a>
+          <a href="#contact">Connect</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode">Dark mode</button>
+      </div>
+    </div>
+  </header>
+
+  <section id="overview" class="hero section-reveal">
+    <div class="container">
+      <div class="eyebrow">Deeper Dive - Operational Leadership - Governance - Scale</div>
+      <div class="hero-flex">
+        <div class="hero-copy">
+          <h1>A deeper look at how I build control, stabilise complexity and scale operations.</h1>
+          <p>This page is designed for anyone who wants to go beyond the headline case study and explore the underlying themes, examples and operating style in more detail. The structure mirrors how I think: diagnose the problem, create control, and then build scalable momentum.</p>
+          <div class="button-row">
+            <a class="button" href="#deep-dive">Start exploring</a>
+            <a class="button alt" href="index.html">Back to main page</a>
+          </div>
+        </div>
+        <div class="hero-aside">
+          <div class="panel-section">
+            <div class="eyebrow" style="margin-bottom:8px;">How to use this page</div>
+            <p class="small">Use the topic filters to browse the themes that matter most. Each section expands into context, action and outcome, so people can go deeper without losing the overall structure.</p>
+          </div>
+          <div class="quote">I stabilise complex environments, introduce control through operating model and governance, and then scale through aligned technology and leadership.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="deep-dive" class="hero">
+    <div class="container">
+      <div class="eyebrow">Interactive Deep Dive</div>
+      <h2>Explore the experience by theme</h2>
+      <p class="small" style="max-width:760px; margin-bottom:0;">Open the sections that matter most. Each one is grouped into context, action and outcome, with supporting examples and what it says about how I operate.</p>
+
+      <div class="filter-row sticky" aria-label="Filter themes">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="operations">Operations</button>
+        <button class="filter-btn" data-filter="stabilisation">Stabilisation</button>
+        <button class="filter-btn" data-filter="governance">Governance</button>
+        <button class="filter-btn" data-filter="commercial">Commercial</button>
+        <button class="filter-btn" data-filter="leadership">Leadership</button>
+      </div>
+
+      <div class="accordion">
+        <article class="accordion-item section-card" id="theme-1" data-tags="operations governance">
+          <button class="accordion-toggle" aria-expanded="true">
+            <div>
+              <div class="accordion-kicker">Control & Operating Structure</div>
+              <div class="accordion-title">I turn chaos into controlled, scalable operations</div>
+              <p class="accordion-summary">From paper-based environments to enterprise operating backbones, I build structure that improves flow, control and commercial performance.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Operating model</span>
+              <span class="chip">ERP / CRM</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Early career foundations</h4>
+                    <p>I started in a fully manual environment with paper job tickets, filing cabinets, low visibility and high error rates. I introduced digital job tracking, indexed document retrieval and structured workflows before this was normal in SME environments.</p>
+                    <ul>
+                      <li>Eliminated lost work and rekeying errors</li>
+                      <li>Improved turnaround times and customer experience</li>
+                      <li>Created early foundations for scalable operations</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>What this says about me</h4>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Instinct for structure</strong>I create control where none exists.</div>
+                      <div class="highlight"><strong>Practical bias</strong>I focus on adoptable solutions, not complexity for its own sake.</div>
+                      <div class="highlight"><strong>Flow before tooling</strong>Control and process design come before technology embellishment.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Apogee operating backbone</h4>
+                    <p>Apogee had fragmented systems and limited control across sales, delivery and service. I designed and built a joined-up operating backbone spanning ERP, CRM, workflow and finance integration.</p>
+                    <ul>
+                      <li>ERP controlled sales through to delivery and sign-off</li>
+                      <li>CRM integrated with service, asset and lease data</li>
+                      <li>Workflow enforced what good looked like</li>
+                      <li>Controls prevented invalid solutions being sold</li>
+                      <li>Commercial insight improved visibility of lifecycle, service performance and upgrade opportunity</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>Tinder from day zero</h4>
+                    <p>Before launching Tinder, I built the operating platform first: ERP, CRM, BI, workflows, reporting and dashboards. As the business grew, I evolved it to include mobile workforce integration, compliance gating and Microsoft stack integration.</p>
+                    <ul>
+                      <li>Sustained around 40% year-on-year growth over nearly a decade</li>
+                      <li>Real-time visibility across the business</li>
+                      <li>High control across a multi-discipline operation</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-2" data-tags="stabilisation operations">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Stabilising Risk</div>
+              <div class="accordion-title">I stabilise high-risk situations and lead critical accounts</div>
+              <p class="accordion-summary">I am often brought into situations where delivery risk, solution quality or client confidence is under pressure and control needs to be restored quickly.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Enterprise accounts</span>
+              <span class="chip">Recovery</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>National & FTSE100 accounts</h4>
+                    <p>At Apogee I became the go-to technical authority and opinion leader across major national and FTSE100 accounts. I was regularly brought into high-value sales engagements, strategic account reviews and complex solution design sessions.</p>
+                    <ul>
+                      <li>Translated business need into workable solutions</li>
+                      <li>Challenged weak assumptions before they became delivery issues</li>
+                      <li>Ensured what was sold could actually be delivered at scale</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>Outcomes</h4>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Higher credibility</strong>Improved confidence with major enterprise clients.</div>
+                      <div class="highlight"><strong>Better win quality</strong>Improved solution quality and win rates.</div>
+                      <div class="highlight"><strong>Lower delivery risk</strong>Reduced the chance of selling something operationally unsound.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Wandsworth Council</h4>
+                    <p>A major contract had been sold incorrectly, creating a serious risk of failure and reputational damage. I stepped in, rapidly assessed the constraints, designed a viable solution in real time, delivered within one month and reframed the commercial model so it worked.</p>
+                  </div>
+                  <div class="panel-section">
+                    <h4>First Choice / TUI Group</h4>
+                    <p>A large enterprise client was experiencing service and workflow challenges that risked the account. I redesigned the service interaction and support model, introduced better visibility and control, and aligned delivery to operational reality.</p>
+                    <ul>
+                      <li>Stabilised service delivery</li>
+                      <li>Improved client confidence</li>
+                      <li>Protected a key enterprise account</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-3" data-tags="operations stabilisation commercial">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Scaling Through Structure</div>
+              <div class="accordion-title">I scale businesses through structure, not chaos</div>
+              <p class="accordion-summary">Whether through PE-backed acquisition growth or expansion into new services, I build repeatable structures before I scale.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Acquisitions</span>
+              <span class="chip">New markets</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>PE growth and integration</h4>
+                    <p>I played a central role in PE funding preparation, board engagement, technical due diligence and day-zero integration. I often stepped into acquired businesses in an MD-style operational leadership role to stabilise operations, protect revenue and embed the Apogee operating model and culture.</p>
+                    <ul>
+                      <li>All acquisitions integrated onto the Apogee platform within 60 days</li>
+                      <li>All delivered ROI within 18 months, typically closer to 12</li>
+                      <li>14 acquisitions integrated into a consistent national operating model</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>What this shows</h4>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Repeatability</strong>I scale through structured methods, not one-off heroics.</div>
+                      <div class="highlight"><strong>Commercial awareness</strong>I combine operational control with ROI discipline.</div>
+                      <div class="highlight"><strong>Hands-on stabilisation</strong>I do not just plan integrations, I help land them.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Tinder capability expansion</h4>
+                    <p>I led expansion into VoIP and unified comms, managed Wi-Fi, structured cabling, fibre and civils, and passive fire stopping.</p>
+                    <ul>
+                      <li>Rapid learning to working knowledge</li>
+                      <li>Partner first, then internalise the capability</li>
+                      <li>Build the delivery model before scaling the revenue line</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>Outcomes</h4>
+                    <ul>
+                      <li>Multiple revenue streams created</li>
+                      <li>Fast time-to-market, including VoIP live in two months</li>
+                      <li>Moved from subcontract to primary delivery in key areas</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-4" data-tags="governance operations leadership">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Governance That Enables Delivery</div>
+              <div class="accordion-title">I build governance that enables delivery</div>
+              <p class="accordion-summary">I design governance into operational flow so that control improves delivery rather than slowing it down.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Compliance</span>
+              <span class="chip">Cadence</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>High-risk civils environment</h4>
+                    <p>I operated in live street works and utility-risk environments with frequent audits, potential fines, commercial penalties and HSE exposure. I embedded governance directly into workflows.</p>
+                    <ul>
+                      <li>Compliance gates within ERP workflows</li>
+                      <li>Real-time field data capture and validation</li>
+                      <li>Audit-ready reporting</li>
+                      <li>Alignment to ISO 9001, ISO 14001 and Cyber Essentials expectations</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>Outcome</h4>
+                    <ul>
+                      <li>92%+ compliance scores</li>
+                      <li>Strategic partner status achieved</li>
+                      <li>Sole supplier regions awarded</li>
+                      <li>Minimal audit failures</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Governance model</h4>
+                    <p>Across Apogee and Tinder, I introduced structured governance for change, risk, vendor management and operating cadence.</p>
+                    <ul>
+                      <li>Defined change types and approval pathways</li>
+                      <li>Active risk registers with ownership and escalation</li>
+                      <li>SLA-based supplier governance and review cadence</li>
+                      <li>Daily, weekly and monthly operational and leadership rhythms</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>What this shows</h4>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Governance in the flow</strong>Control is designed into how work happens.</div>
+                      <div class="highlight"><strong>Cadence matters</strong>Good operating rhythm reduces drift and hidden risk.</div>
+                      <div class="highlight"><strong>Ownership matters</strong>Data plus accountability improves response speed and vendor performance.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-5" data-tags="commercial leadership">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Commercial Judgement</div>
+              <div class="accordion-title">I make commercially disciplined decisions</div>
+              <p class="accordion-summary">I do not confuse activity with value. I use data, delivery reality and margin logic to decide where to push and where to stop.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Value protection</span>
+              <span class="chip">Decision quality</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Walking away from bad revenue</h4>
+                    <p>When there was an opportunity to expand Hyperoptic delivery into new regions, I analysed historic and projected data, mapped delivery risk and resource needs, and identified structural unprofitability. I declined the expansion.</p>
+                    <ul>
+                      <li>Avoided overextension</li>
+                      <li>Protected core business performance</li>
+                      <li>Maintained delivery quality</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>Strategic exit judgement</h4>
+                    <p>When market conditions shifted, consolidation increased and the capital required to compete changed materially, I took a disciplined view. My judgement was that further capital investment would not create an acceptable return or sustainable position.</p>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Commercial realism</strong>Data over optimism.</div>
+                      <div class="highlight"><strong>Independent judgement</strong>Willing to make difficult calls.</div>
+                      <div class="highlight"><strong>Value protection</strong>Not pursuing growth at any cost.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-6" data-tags="leadership governance operations">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Leadership & Accountability</div>
+              <div class="accordion-title">I lead through clarity, purpose and accountability</div>
+              <p class="accordion-summary">I reduce central dependency by creating ownership, budget responsibility, behavioural clarity and stronger leadership capability.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Leadership teams</span>
+              <span class="chip">Ownership</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Building leadership ownership</h4>
+                    <p>I built leadership teams aligned to value streams, introduced divisional budget ownership and developed leadership capability so that accountability sat closer to the work.</p>
+                    <ul>
+                      <li>Stronger accountability</li>
+                      <li>Better financial awareness</li>
+                      <li>Reduced dependency on a central bottleneck</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>Purpose and behavioural control</h4>
+                    <p>I defined a clear purpose statement, rules of winning and measurable core values. These were used for performance management, behaviour correction and cultural alignment.</p>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Culture as control</strong>Behavioural clarity reduces management drag.</div>
+                      <div class="highlight"><strong>Leadership by design</strong>People perform better when ownership is explicit.</div>
+                      <div class="highlight"><strong>Purpose matters</strong>Teams move faster when they understand why the model exists.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-7" data-tags="operations commercial">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Data & Performance Insight</div>
+              <div class="accordion-title">I run businesses through data and insight</div>
+              <p class="accordion-summary">Visibility is not a nice-to-have. It is how you control margin, allocate effort properly and make better decisions with less noise.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">BI</span>
+              <span class="chip">Margin control</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>What I built</h4>
+                    <p>I built operational dashboards, total volume reporting and real-time performance visibility through tools such as iBoard and internal reporting layers.</p>
+                    <ul>
+                      <li>Identified unprofitable customers and activities</li>
+                      <li>Improved margin through better decisions</li>
+                      <li>Supported leadership action with live operational insight</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>What this shows</h4>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Visibility drives control</strong>Leaders need to see what is really happening.</div>
+                      <div class="highlight"><strong>Data beats instinct</strong>Performance improves when decisions are evidence-based.</div>
+                      <div class="highlight"><strong>Reporting should be operational</strong>Dashboards need to help run the business, not just describe it.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-8" data-tags="leadership governance commercial">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Senior Stakeholder Credibility</div>
+              <div class="accordion-title">I operate credibly at senior and external levels</div>
+              <p class="accordion-summary">I am comfortable engaging with CEOs, boards, investors, regulators, partners and external stakeholders where judgement, trust and clear communication matter.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Board-level</span>
+              <span class="chip">Regulated environments</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Senior engagement</h4>
+                    <p>I have worked directly with CEOs, chairpersons and private equity stakeholders, including covenant and performance discussions and wider strategic decision support.</p>
+                    <ul>
+                      <li>Trusted advisor in strategic decisions</li>
+                      <li>Comfortable operating at board level</li>
+                      <li>Able to bridge operational detail with executive priorities</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>External credibility</h4>
+                    <p>My experience includes industry speaking, advisory work with major firms, conference leadership, Vistage exposure and the design of an operating model for a regulated cannabis business involving prescribing doctors, central banking considerations, payment processing, telecoms connectivity and end-to-end patient data workflows.</p>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Trusted beyond one organisation</strong>Comfortable in external-facing leadership roles.</div>
+                      <div class="highlight"><strong>Regulated context awareness</strong>Can operate in data-sensitive, multi-stakeholder environments.</div>
+                      <div class="highlight"><strong>Executive communication</strong>Can make complex things understandable and actionable.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="accordion-item section-card" id="theme-9" data-tags="leadership operations stabilisation">
+          <button class="accordion-toggle" aria-expanded="false">
+            <div>
+              <div class="accordion-kicker">Learning Speed</div>
+              <div class="accordion-title">I learn fast and apply it practically</div>
+              <p class="accordion-summary">I do not need years to become useful in a new domain. I build working knowledge quickly and turn it into controlled delivery.</p>
+            </div>
+            <div class="accordion-meta">
+              <span class="chip">Rapid assimilation</span>
+              <span class="chip">Practical application</span>
+              <span class="toggle-icon">+</span>
+            </div>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-content">
+                <div class="panel-grid">
+                  <div class="panel-section">
+                    <h4>Examples</h4>
+                    <ul>
+                      <li>VoIP deployed in two months while still emerging in the SME market</li>
+                      <li>Fibre and civils capability scaled to strategic partner status</li>
+                      <li>Regulated cannabis platform shaped in a complex multi-stakeholder environment</li>
+                      <li>Early workflow and document systems introduced before widespread SME adoption and before cloud tooling became common</li>
+                    </ul>
+                  </div>
+                  <div class="panel-section">
+                    <h4>What this shows</h4>
+                    <div class="highlight-list">
+                      <div class="highlight"><strong>Rapid assimilation</strong>I can enter unfamiliar territory and get productive quickly.</div>
+                      <div class="highlight"><strong>Practical mindset</strong>I focus on what works in the real world.</div>
+                      <div class="highlight"><strong>Confidence under ambiguity</strong>I am comfortable building clarity in new or messy environments.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="challenge-cta section-reveal">
+    <div class="container">
+      <div class="eyebrow">Connect</div>
+      <h2>Want the headline summary as well?</h2>
+      <p>This deeper dive is designed to sit alongside the main case study page. The main page gives the concise narrative. This page gives the additional depth for anyone who wants to explore how that experience was built.</p>
+      <div class="button-row">
+        <a class="button" href="index.html">Main case study page</a>
+        <a class="button alt" href="https://www.linkedin.com/in/paul-hayes-38865a15/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><strong>Paul Hayes</strong> - Operational Leadership Experience & Impact</p>
+    <div class="button-row" style="justify-content:center;">
+      <a class="button" href="index.html">View main page</a>
+      <a class="button alt" href="https://www.linkedin.com/in/paul-hayes-38865a15/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+    </div>
+  </footer>
+
+  <script>
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function smoothScrollTo(targetY, duration) {
+      const startY = window.scrollY;
+      const diff = targetY - startY;
+      let start;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        const time = timestamp - start;
+        const progress = Math.min(time / duration, 1);
+        const eased = easeInOutCubic(progress);
+        window.scrollTo(0, startY + diff * eased);
+        if (time < duration) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const id = this.getAttribute('href');
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          const y = target.getBoundingClientRect().top + window.pageYOffset - 100;
+          smoothScrollTo(y, 650);
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.section-reveal').forEach(section => observer.observe(section));
+
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('paulTheme');
+    const initialTheme = savedTheme || 'light';
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeToggle.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+
+    applyTheme(initialTheme);
+
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      localStorage.setItem('paulTheme', newTheme);
+    });
+
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    function setAccordionState(item, shouldOpen) {
+      const button = item.querySelector('.accordion-toggle');
+      item.classList.toggle('open', shouldOpen);
+      button.setAttribute('aria-expanded', String(shouldOpen));
+    }
+
+    accordionItems.forEach((item, index) => {
+      const button = item.querySelector('.accordion-toggle');
+      if (index === 0) {
+        setAccordionState(item, true);
+      }
+      button.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        setAccordionState(item, !isOpen);
+      });
+    });
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const sectionCards = document.querySelectorAll('.section-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        sectionCards.forEach(card => {
+          const tags = (card.dataset.tags || '').split(' ');
+          const show = filter === 'all' || tags.includes(filter);
+          card.classList.toggle('hidden-by-filter', !show);
+
+          if (filter === 'all') {
+            setAccordionState(card, false);
+          } else {
+            setAccordionState(card, show);
+          }
+        });
+
+        const section = document.querySelector('#deep-dive');
+        if (section) {
+          const y = section.getBoundingClientRect().top + window.pageYOffset - 100;
+          smoothScrollTo(y, 500);
+        }
+      });
+    });
+
+    const sections = [...document.querySelectorAll('section[id], article[id]')];
+    const navLinks = [...document.querySelectorAll('nav a')];
+
+    const sectionSpy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          link.classList.toggle('active', href === '#' + id);
+        });
+      });
+    }, { threshold: 0.35 });
+
+    sections.forEach(section => sectionSpy.observe(section));
+  </script>
+</body>
+</html>
